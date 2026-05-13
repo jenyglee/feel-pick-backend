@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { CreatePickDto } from './dto/create-pick.dto';
 import { VoteDto } from './dto/vote.dto';
@@ -13,25 +9,15 @@ export class PicksService {
   private readonly picks = new Map<string, Pick>();
 
   create(dto: CreatePickDto): Pick {
-    const title = dto.title?.trim();
-    console.log('title', title);
-    if (!title) {
-      throw new BadRequestException('title is required');
-    }
-    const labels = (dto.options ?? []).map((o) => o?.trim()).filter(Boolean);
-    if (labels.length < 2) {
-      throw new BadRequestException('at least 2 options are required');
-    }
-
-    const options: PickOption[] = labels.map((label) => ({
+    const options: PickOption[] = dto.options.map((label) => ({
       id: randomUUID(),
-      label,
+      label: label.trim(),
       votes: 0,
     }));
 
     const pick: Pick = {
       id: randomUUID(),
-      title,
+      title: dto.title.trim(),
       description: dto.description?.trim() || undefined,
       options,
       createdAt: new Date(),

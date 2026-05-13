@@ -1,4 +1,4 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PicksService } from './picks.service';
 
@@ -20,12 +20,6 @@ describe('PicksService', () => {
     expect(pick.id).toBeDefined();
     expect(pick.options).toHaveLength(2);
     expect(pick.options.every((o) => o.votes === 0)).toBe(true);
-  });
-
-  it('rejects a pick with fewer than 2 options', () => {
-    expect(() => service.create({ title: 'Solo', options: ['only'] })).toThrow(
-      BadRequestException,
-    );
   });
 
   it('increments the vote count for the chosen option', () => {
