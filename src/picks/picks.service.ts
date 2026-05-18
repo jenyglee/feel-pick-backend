@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { CreatePickDto } from './dto/create-pick.dto';
 import { VoteDto } from './dto/vote.dto';
-import { Pick, PickOption } from './entities/pick.entity';
+import Pick, { PickOption } from './entities/pick.entity';
 
 @Injectable()
 export class PicksService {

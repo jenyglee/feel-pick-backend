@@ -11,7 +11,7 @@ export class PickOption {
   votes: number;
 }
 
-export class Pick {
+export default class Pick {
   @ApiProperty({ format: 'uuid' })
   id: string;
 

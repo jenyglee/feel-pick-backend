@@ -11,7 +11,7 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePickDto } from './dto/create-pick.dto';
 import { VoteDto } from './dto/vote.dto';
-import { Pick } from './entities/pick.entity';
+import Pick from './entities/pick.entity';
 import { PicksService } from './picks.service';
 
 @ApiTags('picks')
