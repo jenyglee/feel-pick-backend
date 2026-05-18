@@ -1,0 +1,32 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: feelpick-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: feelpick
+      MYSQL_USER: feelpick
+      MYSQL_PASSWORD: feelpick
+    ports:
+      - '3307:3306'
+    volumes:
+      - feelpick-mysql-data:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'mysqladmin',
+          'ping',
+          '-h',
+          'localhost',
+          '-u',
+          'root',
+          '-proot',
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  feelpick-mysql-data:

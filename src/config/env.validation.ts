@@ -29,6 +29,9 @@ export class EnvironmentVariables {
   @IsString()
   @IsOptional()
   CORS_ORIGIN: string = '*';
+
+  @IsString()
+  DATABASE_URL: string;
 }
 
 export function validateEnv(

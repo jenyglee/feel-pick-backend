@@ -57,3 +57,5 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Claude Code (개인 설정만 제외, .claude/settings.json은 팀 공유 가능)
 .claude/settings.local.json
+
+/generated/prisma

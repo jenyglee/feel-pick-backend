@@ -9,6 +9,9 @@ export class PickOption {
 
   @ApiProperty({ minimum: 0 })
   votes: number;
+
+  @ApiProperty({ format: 'uuid' })
+  pickId: string;
 }
 
 export default class Pick {
@@ -18,8 +21,8 @@ export default class Pick {
   @ApiProperty()
   title: string;
 
-  @ApiProperty({ required: false })
-  description?: string;
+  @ApiProperty({ nullable: true, type: String })
+  description: string | null;
 
   @ApiProperty({ type: [PickOption] })
   options: PickOption[];

@@ -1,55 +1,47 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { randomUUID } from 'crypto';
 import { CreatePickDto } from './dto/create-pick.dto';
 import { VoteDto } from './dto/vote.dto';
-import Pick, { PickOption } from './entities/pick.entity';
+import Pick from './entities/pick.entity';
+import { PicksRepository } from './picks.repository';
 
 @Injectable()
 export class PicksService {
-  private readonly picks = new Map<string, Pick>();
+  constructor(private readonly picks: PicksRepository) {}
 
-  create(dto: CreatePickDto): Pick {
-    const options: PickOption[] = dto.options.map((label) => ({
-      id: randomUUID(),
-      label: label.trim(),
-      votes: 0,
-    }));
-
-    const pick: Pick = {
-      id: randomUUID(),
+  create(dto: CreatePickDto): Promise<Pick> {
+    const description = dto.description?.trim();
+    return this.picks.create({
       title: dto.title.trim(),
-      description: dto.description?.trim() || undefined,
-      options,
-      createdAt: new Date(),
-    };
-    this.picks.set(pick.id, pick);
-    return pick;
+      description: description ? description : undefined,
+      options: dto.options.map((label) => ({ label: label.trim() })),
+    });
   }
 
-  findAll(): Pick[] {
-    return Array.from(this.picks.values());
+  findAll(): Promise<Pick[]> {
+    return this.picks.findAll();
   }
 
-  findOne(id: string): Pick {
-    const pick = this.picks.get(id);
+  async findOne(id: string): Promise<Pick> {
+    const pick = await this.picks.findOne(id);
     if (!pick) {
       throw new NotFoundException(`pick ${id} not found`);
     }
     return pick;
   }
 
-  vote(id: string, dto: VoteDto): Pick {
-    const pick = this.findOne(id);
-    const option = pick.options.find((o) => o.id === dto.optionId);
-    if (!option) {
-      throw new NotFoundException(`option ${dto.optionId} not found`);
+  async vote(id: string, dto: VoteDto): Promise<Pick> {
+    const exists = await this.picks.optionExists(id, dto.optionId);
+    if (!exists) {
+      throw new NotFoundException(
+        `option ${dto.optionId} not found on pick ${id}`,
+      );
     }
-    option.votes += 1;
-    return pick;
+    return this.picks.incrementVote(id, dto.optionId);
   }
 
-  remove(id: string): void {
-    if (!this.picks.delete(id)) {
+  async remove(id: string): Promise<void> {
+    const deleted = await this.picks.delete(id);
+    if (!deleted) {
       throw new NotFoundException(`pick ${id} not found`);
     }
   }

@@ -1,45 +1,97 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import Pick from './entities/pick.entity';
+import { PicksRepository } from './picks.repository';
 import { PicksService } from './picks.service';
+
+function makePick(over: Partial<Pick> = {}): Pick {
+  return {
+    id: 'pick-id',
+    title: 'Lunch',
+    description: null,
+    createdAt: new Date(),
+    options: [
+      { id: 'opt-1', label: 'Pizza', votes: 0, pickId: 'pick-id' },
+      { id: 'opt-2', label: 'Salad', votes: 0, pickId: 'pick-id' },
+    ],
+    ...over,
+  };
+}
+
+type RepoMock = jest.Mocked<PicksRepository>;
+
+function createRepoMock(): RepoMock {
+  return {
+    create: jest.fn(),
+    findAll: jest.fn(),
+    findOne: jest.fn(),
+    incrementVote: jest.fn(),
+    delete: jest.fn(),
+    optionExists: jest.fn(),
+  } as unknown as RepoMock;
+}
 
 describe('PicksService', () => {
   let service: PicksService;
+  let repo: RepoMock;
 
   beforeEach(async () => {
+    repo = createRepoMock();
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PicksService],
+      providers: [PicksService, { provide: PicksRepository, useValue: repo }],
     }).compile();
     service = module.get(PicksService);
   });
 
-  it('creates a pick with options and starts vote counts at zero', () => {
-    const pick = service.create({
+  it('delegates create to the repository with trimmed values', async () => {
+    const expected = makePick();
+    repo.create.mockResolvedValue(expected);
+
+    const result = await service.create({
+      title: '  Lunch  ',
+      description: '  ',
+      options: ['  Pizza  ', 'Salad'],
+    });
+
+    expect(repo.create).toHaveBeenCalledWith({
       title: 'Lunch',
-      options: ['Pizza', 'Salad'],
+      description: undefined,
+      options: [{ label: 'Pizza' }, { label: 'Salad' }],
     });
-    expect(pick.id).toBeDefined();
-    expect(pick.options).toHaveLength(2);
-    expect(pick.options.every((o) => o.votes === 0)).toBe(true);
+    expect(result).toBe(expected);
   });
 
-  it('increments the vote count for the chosen option', () => {
-    const pick = service.create({
-      title: 'Drink',
-      options: ['Coffee', 'Tea'],
-    });
-    const target = pick.options[0];
-    const updated = service.vote(pick.id, { optionId: target.id });
-    const voted = updated.options.find((o) => o.id === target.id);
-    expect(voted?.votes).toBe(1);
+  it('throws NotFound when findOne sees null from repository', async () => {
+    repo.findOne.mockResolvedValue(null);
+    await expect(service.findOne('missing')).rejects.toThrow(NotFoundException);
   });
 
-  it('throws when voting on a missing option', () => {
-    const pick = service.create({
-      title: 'Snack',
-      options: ['Chips', 'Cookies'],
+  it('throws NotFound when voting on a missing option', async () => {
+    repo.optionExists.mockResolvedValue(false);
+    await expect(
+      service.vote('pick-id', { optionId: 'nope' }),
+    ).rejects.toThrow(NotFoundException);
+    expect(repo.incrementVote).not.toHaveBeenCalled();
+  });
+
+  it('increments vote when option exists', async () => {
+    const updated = makePick({
+      options: [
+        { id: 'opt-1', label: 'Pizza', votes: 1, pickId: 'pick-id' },
+        { id: 'opt-2', label: 'Salad', votes: 0, pickId: 'pick-id' },
+      ],
     });
-    expect(() => service.vote(pick.id, { optionId: 'nope' })).toThrow(
-      NotFoundException,
-    );
+    repo.optionExists.mockResolvedValue(true);
+    repo.incrementVote.mockResolvedValue(updated);
+
+    const result = await service.vote('pick-id', { optionId: 'opt-1' });
+
+    expect(repo.incrementVote).toHaveBeenCalledWith('pick-id', 'opt-1');
+    expect(result).toBe(updated);
+  });
+
+  it('throws NotFound when deleting a missing pick', async () => {
+    repo.delete.mockResolvedValue(false);
+    await expect(service.remove('missing')).rejects.toThrow(NotFoundException);
   });
 });

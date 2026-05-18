@@ -22,21 +22,21 @@ export class PicksController {
   @Post()
   @ApiOperation({ summary: 'Create a pick' })
   @ApiResponse({ status: 201, type: Pick })
-  create(@Body() dto: CreatePickDto): Pick {
+  create(@Body() dto: CreatePickDto): Promise<Pick> {
     return this.picksService.create(dto);
   }
 
   @Get()
   @ApiOperation({ summary: 'List all picks' })
   @ApiResponse({ status: 200, type: [Pick] })
-  findAll(): Pick[] {
+  findAll(): Promise<Pick[]> {
     return this.picksService.findAll();
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a pick by id' })
   @ApiResponse({ status: 200, type: Pick })
-  findOne(@Param('id', new ParseUUIDPipe()) id: string): Pick {
+  findOne(@Param('id', new ParseUUIDPipe()) id: string): Promise<Pick> {
     return this.picksService.findOne(id);
   }
 
@@ -46,7 +46,7 @@ export class PicksController {
   vote(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() dto: VoteDto,
-  ): Pick {
+  ): Promise<Pick> {
     return this.picksService.vote(id, dto);
   }
 
@@ -54,7 +54,7 @@ export class PicksController {
   @HttpCode(204)
   @ApiOperation({ summary: 'Delete a pick' })
   @ApiResponse({ status: 204 })
-  remove(@Param('id', new ParseUUIDPipe()) id: string): void {
-    this.picksService.remove(id);
+  remove(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
+    return this.picksService.remove(id);
   }
 }
