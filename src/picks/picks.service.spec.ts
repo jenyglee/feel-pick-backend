@@ -1,14 +1,17 @@
-import { NotFoundException } from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import Pick from './entities/pick.entity';
 import { PicksRepository } from './picks.repository';
 import { PicksService } from './picks.service';
+
+const OWNER_ID = 'user-1';
 
 function makePick(over: Partial<Pick> = {}): Pick {
   return {
     id: 'pick-id',
     title: 'Lunch',
     description: null,
+    userId: OWNER_ID,
     createdAt: new Date(),
     options: [
       { id: 'opt-1', label: 'Pizza', votes: 0, pickId: 'pick-id' },
@@ -43,17 +46,18 @@ describe('PicksService', () => {
     service = module.get(PicksService);
   });
 
-  it('delegates create to the repository with trimmed values', async () => {
+  it('delegates create to the repository with trimmed values and owner id', async () => {
     const expected = makePick();
     repo.create.mockResolvedValue(expected);
 
-    const result = await service.create({
+    const result = await service.create(OWNER_ID, {
       title: '  Lunch  ',
       description: '  ',
       options: ['  Pizza  ', 'Salad'],
     });
 
     expect(repo.create).toHaveBeenCalledWith({
+      userId: OWNER_ID,
       title: 'Lunch',
       description: undefined,
       options: [{ label: 'Pizza' }, { label: 'Salad' }],
@@ -91,7 +95,25 @@ describe('PicksService', () => {
   });
 
   it('throws NotFound when deleting a missing pick', async () => {
-    repo.delete.mockResolvedValue(false);
-    await expect(service.remove('missing')).rejects.toThrow(NotFoundException);
+    repo.findOne.mockResolvedValue(null);
+    await expect(service.remove(OWNER_ID, 'missing')).rejects.toThrow(
+      NotFoundException,
+    );
+    expect(repo.delete).not.toHaveBeenCalled();
+  });
+
+  it('throws Forbidden when deleting another user pick', async () => {
+    repo.findOne.mockResolvedValue(makePick({ userId: 'other-user' }));
+    await expect(service.remove(OWNER_ID, 'pick-id')).rejects.toThrow(
+      ForbiddenException,
+    );
+    expect(repo.delete).not.toHaveBeenCalled();
+  });
+
+  it('deletes a pick owned by the requesting user', async () => {
+    repo.findOne.mockResolvedValue(makePick());
+    repo.delete.mockResolvedValue(true);
+    await service.remove(OWNER_ID, 'pick-id');
+    expect(repo.delete).toHaveBeenCalledWith('pick-id');
   });
 });

@@ -7,8 +7,17 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
+import User from '../users/entities/user.entity';
 import { CreatePickDto } from './dto/create-pick.dto';
 import { VoteDto } from './dto/vote.dto';
 import Pick from './entities/pick.entity';
@@ -20,10 +29,15 @@ export class PicksController {
   constructor(private readonly picksService: PicksService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a pick' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create a pick (auth required)' })
   @ApiResponse({ status: 201, type: Pick })
-  create(@Body() dto: CreatePickDto): Promise<Pick> {
-    return this.picksService.create(dto);
+  create(
+    @CurrentUser() user: User,
+    @Body() dto: CreatePickDto,
+  ): Promise<Pick> {
+    return this.picksService.create(user.id, dto);
   }
 
   @Get()
@@ -51,10 +65,15 @@ export class PicksController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   @HttpCode(204)
-  @ApiOperation({ summary: 'Delete a pick' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete a pick (owner only)' })
   @ApiResponse({ status: 204 })
-  remove(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
-    return this.picksService.remove(id);
+  remove(
+    @CurrentUser() user: User,
+    @Param('id', new ParseUUIDPipe()) id: string,
+  ): Promise<void> {
+    return this.picksService.remove(user.id, id);
   }
 }

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreatePickDto } from './dto/create-pick.dto';
 import { VoteDto } from './dto/vote.dto';
 import Pick from './entities/pick.entity';
@@ -8,9 +12,10 @@ import { PicksRepository } from './picks.repository';
 export class PicksService {
   constructor(private readonly picks: PicksRepository) {}
 
-  create(dto: CreatePickDto): Promise<Pick> {
+  create(userId: string, dto: CreatePickDto): Promise<Pick> {
     const description = dto.description?.trim();
     return this.picks.create({
+      userId,
       title: dto.title.trim(),
       description: description ? description : undefined,
       options: dto.options.map((label) => ({ label: label.trim() })),
@@ -39,10 +44,14 @@ export class PicksService {
     return this.picks.incrementVote(id, dto.optionId);
   }
 
-  async remove(id: string): Promise<void> {
-    const deleted = await this.picks.delete(id);
-    if (!deleted) {
+  async remove(userId: string, id: string): Promise<void> {
+    const pick = await this.picks.findOne(id);
+    if (!pick) {
       throw new NotFoundException(`pick ${id} not found`);
     }
+    if (pick.userId !== userId) {
+      throw new ForbiddenException('You can only delete your own picks');
+    }
+    await this.picks.delete(id);
   }
 }

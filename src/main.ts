@@ -29,6 +29,7 @@ async function bootstrap() {
     .setTitle('Feel Pick API')
     .setDescription('Pick & vote API')
     .setVersion('0.0.1')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('docs', app, document);

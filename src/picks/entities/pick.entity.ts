@@ -24,6 +24,9 @@ export default class Pick {
   @ApiProperty({ nullable: true, type: String })
   description: string | null;
 
+  @ApiProperty({ format: 'uuid' })
+  userId: string;
+
   @ApiProperty({ type: [PickOption] })
   options: PickOption[];
 

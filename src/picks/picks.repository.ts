@@ -12,12 +12,14 @@ export class PicksRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   create(data: {
+    userId: string;
     title: string;
     description?: string;
     options: { label: string }[];
   }): Promise<Pick> {
     return this.prisma.pick.create({
       data: {
+        userId: data.userId,
         title: data.title,
         description: data.description,
         options: { create: data.options },
