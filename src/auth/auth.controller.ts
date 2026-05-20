@@ -5,6 +5,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import User from '../users/entities/user.entity';
 import { AuthService } from './auth.service';
@@ -18,7 +19,9 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  // 회원가입/로그인은 무차별 대입 표적이라 전역(100/분)보다 훨씬 빡빡하게: 분당 5회.
   @Post('signup')
+  @Throttle({ default: { ttl: 60_000, limit: 5 } })
   @ApiOperation({ summary: 'Sign up with email + password + displayName' })
   @ApiResponse({ status: 201, type: TokenResponseDto })
   signup(@Body() dto: SignupDto): Promise<TokenResponseDto> {
@@ -26,6 +29,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @Throttle({ default: { ttl: 60_000, limit: 5 } })
   @ApiOperation({ summary: 'Log in with email + password' })
   @ApiResponse({ status: 201, type: TokenResponseDto })
   login(@Body() dto: LoginDto): Promise<TokenResponseDto> {

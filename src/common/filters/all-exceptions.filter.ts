@@ -39,6 +39,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
     };
 
     if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
+      // 보안: request.body는 절대 로그에 남기지 않는다 (비밀번호/토큰이 들어있을 수 있음).
+      // 추적엔 method/url/status/stack 만으로 충분하다.
       this.logger.error(
         `${request.method} ${request.url} -> ${status}`,
         exception instanceof Error ? exception.stack : String(exception),
