@@ -14,8 +14,8 @@ describe('AppController', () => {
     appController = app.get<AppController>(AppController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
+  describe('루트 라우트', () => {
+    it('"Hello World!"를 반환한다', () => {
       expect(appController.getHello()).toBe('Hello World!');
     });
   });

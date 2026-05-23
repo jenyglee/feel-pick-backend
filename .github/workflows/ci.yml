@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    # e2e 테스트용 MySQL 8.4를 서비스 컨테이너로 띄운다.
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: feelpick_test
+        ports:
+          - 3307:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    # 모든 step에서 쓰는 env. DATABASE_URL은 prisma generate(postinstall)에도 필요.
+    # job 레벨 env가 이미 설정돼 있으므로 .env.test의 dotenv는 이 값을 덮지 않는다.
+    env:
+      DATABASE_URL: "mysql://root:root@127.0.0.1:3307/feelpick_test"
+      JWT_SECRET: "ci-secret-key-at-least-16-characters"
+      JWT_EXPIRES_IN: "1d"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm test
+
+      - name: e2e tests
+        run: npm run test:e2e

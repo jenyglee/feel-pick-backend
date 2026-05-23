@@ -33,10 +33,7 @@ export class PicksController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a pick (auth required)' })
   @ApiResponse({ status: 201, type: Pick })
-  create(
-    @CurrentUser() user: User,
-    @Body() dto: CreatePickDto,
-  ): Promise<Pick> {
+  create(@CurrentUser() user: User, @Body() dto: CreatePickDto): Promise<Pick> {
     return this.picksService.create(user.id, dto);
   }
 

@@ -28,7 +28,10 @@ import { UsersModule } from './users/users.module';
   providers: [
     AppService,
     // ThrottlerGuard를 전역 가드로 등록 → 모든 라우트에 자동 적용.
-    { provide: APP_GUARD, useClass: ThrottlerGuard },
+    // e2e 테스트에서는 rate limit이 테스트를 흔들지 않도록 등록하지 않는다.
+    ...(process.env.NODE_ENV === 'test'
+      ? []
+      : [{ provide: APP_GUARD, useClass: ThrottlerGuard }]),
   ],
 })
 export class AppModule {}

@@ -32,4 +32,17 @@ export default tseslint.config(
       "prettier/prettier": ["error", { endOfLine: "auto" }],
     },
   },
+  {
+    // 테스트 파일 완화:
+    // - e2e는 supertest의 res.body가 any라 unsafe 접근이 불가피
+    // - 단위 테스트는 jest mock 메서드 참조(expect(mock.fn))가 unbound-method 오탐을 냄
+    files: ['test/**/*.ts', 'src/**/*.spec.ts'],
+    rules: {
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/unbound-method': 'off',
+    },
+  },
 );

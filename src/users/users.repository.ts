@@ -12,11 +12,7 @@ const publicUserSelect = {
 export class UsersRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(data: {
-    email: string;
-    passwordHash: string;
-    displayName: string;
-  }) {
+  create(data: { email: string; passwordHash: string; displayName: string }) {
     return this.prisma.user.create({
       data,
       select: publicUserSelect,

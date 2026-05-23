@@ -46,7 +46,7 @@ describe('PicksService', () => {
     service = module.get(PicksService);
   });
 
-  it('delegates create to the repository with trimmed values and owner id', async () => {
+  it('create 호출 시 공백을 다듬고 owner id를 붙여 repository에 위임한다', async () => {
     const expected = makePick();
     repo.create.mockResolvedValue(expected);
 
@@ -65,20 +65,20 @@ describe('PicksService', () => {
     expect(result).toBe(expected);
   });
 
-  it('throws NotFound when findOne sees null from repository', async () => {
+  it('repository가 null을 주면 findOne은 NotFound를 던진다', async () => {
     repo.findOne.mockResolvedValue(null);
     await expect(service.findOne('missing')).rejects.toThrow(NotFoundException);
   });
 
-  it('throws NotFound when voting on a missing option', async () => {
+  it('없는 옵션에 투표하면 NotFound를 던진다', async () => {
     repo.optionExists.mockResolvedValue(false);
-    await expect(
-      service.vote('pick-id', { optionId: 'nope' }),
-    ).rejects.toThrow(NotFoundException);
+    await expect(service.vote('pick-id', { optionId: 'nope' })).rejects.toThrow(
+      NotFoundException,
+    );
     expect(repo.incrementVote).not.toHaveBeenCalled();
   });
 
-  it('increments vote when option exists', async () => {
+  it('옵션이 존재하면 투표 수를 올린다', async () => {
     const updated = makePick({
       options: [
         { id: 'opt-1', label: 'Pizza', votes: 1, pickId: 'pick-id' },
@@ -94,7 +94,7 @@ describe('PicksService', () => {
     expect(result).toBe(updated);
   });
 
-  it('throws NotFound when deleting a missing pick', async () => {
+  it('없는 픽을 삭제하면 NotFound를 던진다', async () => {
     repo.findOne.mockResolvedValue(null);
     await expect(service.remove(OWNER_ID, 'missing')).rejects.toThrow(
       NotFoundException,
@@ -102,7 +102,7 @@ describe('PicksService', () => {
     expect(repo.delete).not.toHaveBeenCalled();
   });
 
-  it('throws Forbidden when deleting another user pick', async () => {
+  it('남의 픽을 삭제하면 Forbidden을 던진다', async () => {
     repo.findOne.mockResolvedValue(makePick({ userId: 'other-user' }));
     await expect(service.remove(OWNER_ID, 'pick-id')).rejects.toThrow(
       ForbiddenException,
@@ -110,7 +110,7 @@ describe('PicksService', () => {
     expect(repo.delete).not.toHaveBeenCalled();
   });
 
-  it('deletes a pick owned by the requesting user', async () => {
+  it('본인이 만든 픽은 삭제한다', async () => {
     repo.findOne.mockResolvedValue(makePick());
     repo.delete.mockResolvedValue(true);
     await service.remove(OWNER_ID, 'pick-id');

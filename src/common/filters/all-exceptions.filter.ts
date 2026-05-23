@@ -16,6 +16,9 @@ interface ErrorResponseBody {
   path: string;
 }
 
+// 5xx 판별 기준. number로 명시해 enum-vs-number 비교 경고를 피한다.
+const SERVER_ERROR_MIN_STATUS: number = HttpStatus.INTERNAL_SERVER_ERROR;
+
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name);
@@ -38,7 +41,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       path: request.url,
     };
 
-    if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
+    if (status >= SERVER_ERROR_MIN_STATUS) {
       // 보안: request.body는 절대 로그에 남기지 않는다 (비밀번호/토큰이 들어있을 수 있음).
       // 추적엔 method/url/status/stack 만으로 충분하다.
       this.logger.error(
@@ -55,7 +58,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       const res = exception.getResponse();
       if (typeof res === 'string') return res;
       if (typeof res === 'object' && res !== null && 'message' in res) {
-        const msg = (res as { message: unknown }).message;
+        const msg = res.message;
         if (typeof msg === 'string' || Array.isArray(msg)) return msg;
       }
       return exception.message;
@@ -67,7 +70,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       const res = exception.getResponse();
       if (typeof res === 'object' && res !== null && 'error' in res) {
-        const err = (res as { error: unknown }).error;
+        const err = res.error;
         if (typeof err === 'string') return err;
       }
     }
