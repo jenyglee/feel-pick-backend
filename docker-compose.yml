@@ -29,7 +29,10 @@ services:
       retries: 20
 
   app:
-    build: .
+    # 빌드 컨텍스트는 레포 루트, Dockerfile은 백엔드 워크스페이스 것.
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
     container_name: feelpick-app
     restart: unless-stopped
     depends_on:
