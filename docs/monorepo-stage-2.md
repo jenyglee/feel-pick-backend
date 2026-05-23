@@ -83,7 +83,7 @@ RUN npm run prisma:generate -w @feel-pick/backend \
 [docker-compose.yml](../docker-compose.yml):
 
 ```yaml
-app:
+backend: # (서비스 이름 — Stage 3에서 web이 합류하며 app→backend로 정리)
   build:
     context: .                          # 상자 = 레포 루트
     dockerfile: apps/backend/Dockerfile # 설명서 위치는 백엔드

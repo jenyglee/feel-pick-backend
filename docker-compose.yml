@@ -28,12 +28,12 @@ services:
       timeout: 5s
       retries: 20
 
-  app:
+  backend:
     # 빌드 컨텍스트는 레포 루트, Dockerfile은 백엔드 워크스페이스 것.
     build:
       context: .
       dockerfile: apps/backend/Dockerfile
-    container_name: feelpick-app
+    container_name: feelpick-backend
     restart: unless-stopped
     depends_on:
       mysql:
@@ -58,13 +58,13 @@ services:
     container_name: feelpick-web
     restart: unless-stopped
     depends_on:
-      - app
+      - backend
     environment:
       NODE_ENV: production
       PORT: 3001
       HOSTNAME: '0.0.0.0' # 컨테이너 밖에서 접근 가능하게 모든 인터페이스 바인딩
-      # 서버 컴포넌트가 컨테이너 네트워크에서 백엔드(app)를 호출.
-      API_URL: 'http://app:3000'
+      # 서버 컴포넌트가 컨테이너 네트워크에서 백엔드(backend)를 호출.
+      API_URL: 'http://backend:3000'
     ports:
       - '3001:3001'
 
