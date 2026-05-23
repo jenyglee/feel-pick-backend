@@ -22,6 +22,7 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
+    "openapi": "ts-node src/openapi.ts openapi.json",
     "postinstall": "prisma generate"
   },
   "dependencies": {

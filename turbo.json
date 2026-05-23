@@ -5,6 +5,13 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
+    "openapi": {
+      "outputs": ["openapi.json"]
+    },
+    "@feel-pick/api-types#build": {
+      "dependsOn": ["@feel-pick/backend#openapi"],
+      "outputs": ["src/schema.d.ts"]
+    },
     "lint": {},
     "test": {
       "dependsOn": ["^build"]
