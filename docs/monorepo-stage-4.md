@@ -134,4 +134,6 @@ export type Schemas = components['schemas'];   // 예: Schemas['Pick']
 
 ## 다음 (Stage 5)
 
-**프론트 ↔ 백엔드 연동** — web에서 `openapi-fetch` + `@feel-pick/api-types`로 `/picks`를 호출해 화면에 띄웁니다. 그리고 **백엔드 DTO를 일부러 바꿔보고 프론트가 컴파일 에러를 내는지** 확인해 타입 공유를 증명합니다. 자세한 계획은 [전환 로드맵](monorepo-migration.md)의 Stage 5 참고.
+**프론트 ↔ 백엔드 연동** — web에서 `openapi-fetch` + `@feel-pick/api-types`로 `/picks`를 호출해 화면에 띄웁니다. 그리고 **백엔드 DTO를 일부러 바꿔보고 프론트가 컴파일 에러를 내는지** 확인해 타입 공유를 증명합니다.
+
+→ 다음: [Stage 5 정리 (프론트↔백 연동)](monorepo-stage-5.md) · [전환 로드맵](monorepo-migration.md)

@@ -13,8 +13,9 @@
 | [모노레포 Stage 2 정리](monorepo-stage-2.md) | Docker/CI를 모노레포에 맞춤 (빌드 컨텍스트 · 워크스페이스 Docker) |
 | [모노레포 Stage 3 정리](monorepo-stage-3.md) | Next.js 프론트 합류 (apps/web · 포트 분리 · turbo dev) |
 | [모노레포 Stage 4 정리](monorepo-stage-4.md) | 공유 타입 파이프라인 (Swagger → openapi-typescript) |
+| [모노레포 Stage 5 정리](monorepo-stage-5.md) | 프론트↔백 연동 (openapi-fetch · 타입 공유 증명) |
 
-> 앞으로 Stage 5~(프론트-백 연동 등)와 프론트엔드 문서도 여기에 쌓입니다.
+> Stage 6(web Docker화 + compose 통합)은 선택. 안 해도 로컬 개발은 완전히 동작합니다.
 
 ## 🛠 백엔드 학습 노트 (`apps/backend/docs/`)
 
