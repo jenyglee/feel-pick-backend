@@ -114,4 +114,6 @@ npm run dev                  # turbo: backend(:3000) + web(:3001) 동시 기동!
 
 ## 다음 (Stage 4)
 
-**공유 타입 파이프라인** — 백엔드 Swagger 문서를 `openapi-typescript`로 변환해 `packages/api-types`를 만들고, 프론트가 그 타입을 import. "백엔드 바뀌면 프론트가 컴파일 에러로 즉시 안다"는 모노레포의 핵심 가치를 구현합니다. 자세한 계획은 [전환 로드맵](monorepo-migration.md)의 Stage 4 참고.
+**공유 타입 파이프라인** — 백엔드 Swagger 문서를 `openapi-typescript`로 변환해 `packages/api-types`를 만들고, 프론트가 그 타입을 import. "백엔드 바뀌면 프론트가 컴파일 에러로 즉시 안다"는 모노레포의 핵심 가치를 구현합니다.
+
+→ 다음: [Stage 4 정리 (공유 타입 파이프라인)](monorepo-stage-4.md) · [전환 로드맵](monorepo-migration.md)
