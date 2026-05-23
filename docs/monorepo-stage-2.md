@@ -138,4 +138,6 @@ app:
 
 ## 다음 (Stage 3)
 
-드디어 프론트엔드 합류 — `apps/web`에 **Next.js를 스캐폴드**하고 turbo로 backend(:3000) + web(:3001)을 동시에 띄웁니다. 자세한 계획은 [모노레포 전환 로드맵](monorepo-migration.md)의 Stage 3 참고.
+드디어 프론트엔드 합류 — `apps/web`에 **Next.js를 스캐폴드**하고 turbo로 backend(:3000) + web(:3001)을 동시에 띄웁니다.
+
+→ 다음: [Stage 3 정리 (Next.js 합류)](monorepo-stage-3.md) · [전환 로드맵](monorepo-migration.md)
