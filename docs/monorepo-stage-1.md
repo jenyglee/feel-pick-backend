@@ -136,4 +136,6 @@ npm run build    # turbo가 백엔드 빌드
 - **docker-compose**의 `build: .` 가 아직 루트를 가리켜요 → `docker compose up` 하면 깨짐. Stage 2에서 `./apps/backend`로 수정.
 - **CI**(.github/workflows)가 "루트 = 백엔드" 가정이라 push 시 실패. Stage 2에서 워크스페이스 기준으로 수정.
 
-즉 **"코드/로컬은 멀쩡, Docker·CI 배선만 Stage 2에서"** 입니다. 자세한 다음 단계는 [모노레포 전환 로드맵](monorepo-migration.md) 참고.
+즉 **"코드/로컬은 멀쩡, Docker·CI 배선만 Stage 2에서"** 입니다.
+
+→ 다음: [Stage 2 정리 (Docker/CI 맞추기)](monorepo-stage-2.md) · [전환 로드맵](monorepo-migration.md)

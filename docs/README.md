@@ -10,8 +10,9 @@
 |---|---|
 | [모노레포 전환 로드맵](monorepo-migration.md) | 백엔드 + Next.js를 한 레포로 합치는 단계별 계획(Stage 0~6) |
 | [모노레포 Stage 1 정리](monorepo-stage-1.md) | 백엔드를 apps/backend로 이동한 실제 작업 (workspaces · Turborepo 입문) |
+| [모노레포 Stage 2 정리](monorepo-stage-2.md) | Docker/CI를 모노레포에 맞춤 (빌드 컨텍스트 · 워크스페이스 Docker) |
 
-> 앞으로 Stage 2~(프론트 합류, 타입 공유 등)와 프론트엔드 문서도 여기에 쌓입니다.
+> 앞으로 Stage 3~(프론트 합류, 타입 공유 등)와 프론트엔드 문서도 여기에 쌓입니다.
 
 ## 🛠 백엔드 학습 노트 (`apps/backend/docs/`)
 
