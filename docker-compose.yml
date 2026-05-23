@@ -28,5 +28,25 @@ services:
       timeout: 5s
       retries: 20
 
+  app:
+    build: .
+    container_name: feelpick-app
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      CORS_ORIGIN: '*'
+      # 컨테이너 네트워크 안에서는 서비스명(mysql) + 내부 포트(3306)로 접속.
+      DATABASE_URL: 'mysql://root:root@mysql:3306/feelpick'
+      JWT_SECRET: 'change-me-in-production-use-openssl-rand-hex-32'
+      JWT_EXPIRES_IN: '1d'
+    ports:
+      - '3000:3000'
+    # 앱 시작 전 마이그레이션 적용 (prisma CLI가 운영 의존성에 포함됨).
+    command: sh -c "npx prisma migrate deploy && node dist/src/main.js"
+
 volumes:
   feelpick-mysql-data:

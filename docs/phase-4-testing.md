@@ -1,6 +1,6 @@
 # Phase 4 — 테스트 / 품질
 
-> 📚 [학습 노트 목차](phase-notes.md) · [← Phase 3](phase-3-security.md)
+> 📚 [학습 노트 목차](phase-notes.md) · [← Phase 3](phase-3-security.md) · 다음 → [Phase 5: 운영/배포](phase-5-deployment.md)
 
 > **3줄 요약**
 > 1. 지금까지 단위 테스트(11개)만 있어서, 진짜 HTTP 요청이 전체를 통과하는지는 검증이 없었다.

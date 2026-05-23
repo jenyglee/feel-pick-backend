@@ -1,0 +1,16 @@
+node_modules
+dist
+coverage
+.git
+.github
+.husky
+.vscode
+docs
+test
+*.log
+.env
+.env.*
+!.env.example
+README.md
+ROADMAP.md
+CONTRIBUTING.md

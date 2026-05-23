@@ -36,8 +36,7 @@ NestJS는 **데코레이터 (`@Controller`, `@Get`, `@Body`...)** 가 메인 문
 | **Phase 2** | [인증 / 인가](phase-2-auth.md) | User 모델 · bcrypt · JWT · Guard · `@CurrentUser()` · 소유권 |
 | **Phase 3** | [보안 강화](phase-3-security.md) | helmet · Rate Limiting · 로깅 안전 · npm audit |
 | **Phase 4** | [테스트 / 품질](phase-4-testing.md) | 단위 vs e2e · 테스트 DB · 커버리지 · GitHub Actions CI |
-
-> Phase 5(운영/배포)는 아직 작성 전이에요. [Phase 4 문서 끝](phase-4-testing.md)에 예고가 있습니다.
+| **Phase 5** | [운영 / 배포](phase-5-deployment.md) | health 체크 · pino 로깅 · Dockerfile · docker-compose |
 
 ---
 
