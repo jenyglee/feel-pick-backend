@@ -130,4 +130,4 @@ Stage 1~5로 **백엔드 + 프론트가 한 레포에서 타입으로 묶인 모
 | 4 | 공유 타입 파이프라인 (Swagger → 타입) |
 | **5** | **프론트↔백 연동 + 타입 공유 증명** |
 
-남은 [Stage 6](monorepo-migration.md)(web Docker화 + compose 통합)은 **선택**이에요. 안 해도 로컬 개발은 완전히 동작합니다.
+→ 다음: [Stage 6 정리 (web Docker화 + compose 통합)](monorepo-stage-6.md) · [전환 로드맵](monorepo-migration.md)
