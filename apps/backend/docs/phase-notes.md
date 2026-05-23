@@ -40,11 +40,14 @@ NestJS는 **데코레이터 (`@Controller`, `@Get`, `@Body`...)** 가 메인 문
 
 ---
 
-## 다음 계획
+## 다음 계획 (레포 전체 문서)
+
+모노레포·프론트엔드 관련 문서는 레포 루트 [docs/](../../../docs/README.md)로 이동했어요.
 
 | 문서 | 내용 |
 |---|---|
-| [모노레포 전환 로드맵](monorepo-migration.md) | 백엔드 + Next.js 프론트를 한 레포로 (Turborepo · 타입 공유) |
+| [모노레포 전환 로드맵](../../../docs/monorepo-migration.md) | 백엔드 + Next.js 프론트를 한 레포로 (Turborepo · 타입 공유) |
+| [모노레포 Stage 1 정리](../../../docs/monorepo-stage-1.md) | 백엔드를 apps/backend로 이동한 실제 작업 |
 
 ---
 

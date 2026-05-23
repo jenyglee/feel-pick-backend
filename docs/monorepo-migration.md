@@ -1,6 +1,6 @@
 # 모노레포 전환 로드맵 (백엔드 + Next.js 프론트)
 
-> 📚 [학습 노트 목차](phase-notes.md)
+> 📚 [문서 홈](README.md) · [백엔드 학습 노트](../apps/backend/docs/phase-notes.md)
 
 지금은 NestJS 백엔드만 있는 단일 레포예요. 여기에 **Next.js 프론트엔드를 같은 레포에 넣어 모노레포**로 만드는 단계별 계획입니다.
 
