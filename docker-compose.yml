@@ -51,5 +51,22 @@ services:
     # 앱 시작 전 마이그레이션 적용 (prisma CLI가 운영 의존성에 포함됨).
     command: sh -c "npx prisma migrate deploy && node dist/src/main.js"
 
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: feelpick-web
+    restart: unless-stopped
+    depends_on:
+      - app
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      HOSTNAME: '0.0.0.0' # 컨테이너 밖에서 접근 가능하게 모든 인터페이스 바인딩
+      # 서버 컴포넌트가 컨테이너 네트워크에서 백엔드(app)를 호출.
+      API_URL: 'http://app:3000'
+    ports:
+      - '3001:3001'
+
 volumes:
   feelpick-mysql-data:
