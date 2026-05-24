@@ -1,26 +1,198 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+ * feel-pick 디자인 토큰 (Tailwind v4 @theme)
+ * 컬러·타이포 토큰의 단일 소스(Single Source of Truth).
+ *
+ * 컬러 스케일: 9색 × 50~950. blue-500(#6382FF)에서 추출한 동일 채도/명도(S/L)
+ * 커브를 모든 색에 적용하고 hue만 변경 (HSL 기반).
+ *   ※ HSL 특성상 같은 S/L이라도 yellow/green은 blue/purple보다 밝게 보일 수 있음.
+ *
+ * 사용 예)
+ *   컬러   : bg-blue-500 / text-red-600 / border-teal-300
+ *   시맨틱 : bg-primary / text-foreground
+ *   타이포 : text-title1 / text-title3 / text-body1  ·  폰트 font-display
+ *
+ * 미리보기: /style-guide
+ */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* static: 사용 여부와 무관하게 모든 토큰을 CSS 변수로 출력 (var(--color-*) 직접 사용 가능) */
+@theme static {
+  /* ── red ───────────────────────────────────────────── */
+  --color-red-50: #fff0f0;
+  --color-red-100: #ffdcdb;
+  --color-red-200: #ffbab8;
+  --color-red-300: #ff9794;
+  --color-red-400: #ff7f7a;
+  --color-red-500: #ff6863;
+  --color-red-600: #f34a44;
+  --color-red-700: #dd322c;
+  --color-red-800: #ab2a26;
+  --color-red-900: #852723;
+  --color-red-950: #5a1d1b;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* ── orange ────────────────────────────────────────── */
+  --color-orange-50: #fff7f0;
+  --color-orange-100: #ffecdb;
+  --color-orange-200: #ffd9b8;
+  --color-orange-300: #ffc694;
+  --color-orange-400: #ffb87a;
+  --color-orange-500: #ffac63;
+  --color-orange-600: #f39644;
+  --color-orange-700: #dd7f2c;
+  --color-orange-800: #ab6426;
+  --color-orange-900: #855123;
+  --color-orange-950: #5a391b;
+
+  /* ── yellow ────────────────────────────────────────── */
+  --color-yellow-50: #fffcf0;
+  --color-yellow-100: #fff9db;
+  --color-yellow-200: #fff3b8;
+  --color-yellow-300: #ffed94;
+  --color-yellow-400: #ffe97a;
+  --color-yellow-500: #ffe563;
+  --color-yellow-600: #f3d644;
+  --color-yellow-700: #ddbf2c;
+  --color-yellow-800: #ab9526;
+  --color-yellow-900: #857523;
+  --color-yellow-950: #5a501b;
+
+  /* ── green ─────────────────────────────────────────── */
+  --color-green-50: #f0fff5;
+  --color-green-100: #dbffe8;
+  --color-green-200: #b8ffd2;
+  --color-green-300: #94ffbb;
+  --color-green-400: #7affab;
+  --color-green-500: #63ff9c;
+  --color-green-600: #44f384;
+  --color-green-700: #2cdd6d;
+  --color-green-800: #26ab57;
+  --color-green-900: #238547;
+  --color-green-950: #1b5a32;
+
+  /* ── teal ──────────────────────────────────────────── */
+  --color-teal-50: #f0fffd;
+  --color-teal-100: #dbfffa;
+  --color-teal-200: #b8fff5;
+  --color-teal-300: #94fff1;
+  --color-teal-400: #7affed;
+  --color-teal-500: #63ffea;
+  --color-teal-600: #44f3dc;
+  --color-teal-700: #2cddc5;
+  --color-teal-800: #26ab9a;
+  --color-teal-900: #238578;
+  --color-teal-950: #1b5a52;
+
+  /* ── cyan ──────────────────────────────────────────── */
+  --color-cyan-50: #f0fcff;
+  --color-cyan-100: #dbf9ff;
+  --color-cyan-200: #b8f3ff;
+  --color-cyan-300: #94edff;
+  --color-cyan-400: #7ae9ff;
+  --color-cyan-500: #63e5ff;
+  --color-cyan-600: #44d6f3;
+  --color-cyan-700: #2cbfdd;
+  --color-cyan-800: #2695ab;
+  --color-cyan-900: #237585;
+  --color-cyan-950: #1b505a;
+
+  /* ── blue (기준 · primary) ─────────────────────────── */
+  --color-blue-50: #f0f3ff;
+  --color-blue-100: #dbe2ff;
+  --color-blue-200: #b8c6ff;
+  --color-blue-300: #94a9ff;
+  --color-blue-400: #7a95ff;
+  --color-blue-500: #6382ff;
+  --color-blue-600: #4467f3;
+  --color-blue-700: #2c50dd;
+  --color-blue-800: #2640ab;
+  --color-blue-900: #233785;
+  --color-blue-950: #1b285a;
+
+  /* ── purple ────────────────────────────────────────── */
+  --color-purple-50: #f8f0ff;
+  --color-purple-100: #eedbff;
+  --color-purple-200: #deb8ff;
+  --color-purple-300: #cd94ff;
+  --color-purple-400: #c17aff;
+  --color-purple-500: #b663ff;
+  --color-purple-600: #a144f3;
+  --color-purple-700: #8a2cdd;
+  --color-purple-800: #6d26ab;
+  --color-purple-900: #572385;
+  --color-purple-950: #3d1b5a;
+
+  /* ── pink ──────────────────────────────────────────── */
+  --color-pink-50: #fff0f7;
+  --color-pink-100: #ffdbec;
+  --color-pink-200: #ffb8d9;
+  --color-pink-300: #ff94c6;
+  --color-pink-400: #ff7ab8;
+  --color-pink-500: #ff63ac;
+  --color-pink-600: #f34496;
+  --color-pink-700: #dd2c7f;
+  --color-pink-800: #ab2664;
+  --color-pink-900: #852351;
+  --color-pink-950: #5a1b39;
+
+  /* ── gray (쿨 그레이 · 블루 언더톤, 디자인 시안 값) ─── */
+  --color-gray-50: #f7fafc;
+  --color-gray-100: #edf2f7;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cbd5e0;
+  --color-gray-400: #a0aec0;
+  --color-gray-500: #718096;
+  --color-gray-600: #4a5568;
+  --color-gray-700: #2d3748;
+  --color-gray-800: #1a202c;
+  --color-gray-900: #171923;
+
+  /* ── 뉴트럴 ────────────────────────────────────────── */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-surface: #d9d9d9; /* 카드 플레이스홀더 배경 */
+
+  /* ── 시맨틱 (위 스케일 참조) ───────────────────────── */
+  --color-primary: var(--color-blue-500);
+  --color-primary-strong: #6c46ff; /* 브랜드 그라데이션 끝점 */
+  --color-background: #000000; /* 다크 배경 */
+  --color-foreground: #ffffff; /* 기본 텍스트 */
+  --color-foreground-muted: rgba(255, 255, 255, 0.6); /* 보조 안내 텍스트 */
+
+  /* ── 폰트 패밀리 ───────────────────────────────────── */
+  /* var(--font-nanum-square-neo): layout.tsx 의 next/font/local 로 주입 */
+  --font-display:
+    var(--font-nanum-square-neo), "NanumSquare Neo", "Pretendard",
+    "Noto Sans KR", system-ui, sans-serif;
+
+  /* ── 타이포 스케일 ─────────────────────────────────── */
+  /* title1 — 화면 제목 (Figma title1) */
+  --text-title1: 28px;
+  --text-title1--line-height: 35px;
+  --text-title1--letter-spacing: -0.84px;
+  --text-title1--font-weight: 800;
+
+  /* title2 — 보간값 (디자인 확정 시 수정) */
+  --text-title2: 24px;
+  --text-title2--line-height: 31px;
+  --text-title2--letter-spacing: -0.72px;
+  --text-title2--font-weight: 800;
+
+  /* title3 — 카드 이름 등 (Figma title3) */
+  --text-title3: 20px;
+  --text-title3--line-height: 26px;
+  --text-title3--letter-spacing: -0.6px;
+  --text-title3--font-weight: 800;
+
+  /* body1 — 본문/안내 문구 (Figma 하단 텍스트) */
+  --text-body1: 17px;
+  --text-body1--line-height: 24px;
+  --text-body1--letter-spacing: -0.51px;
+  --text-body1--font-weight: 400;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-display);
 }
