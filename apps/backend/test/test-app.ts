@@ -26,7 +26,7 @@ export async function createTestApp(): Promise<E2EContext> {
   return { app, prisma };
 }
 
-/** 모든 테이블 비우기. User 삭제 시 Pick/PickOption은 Cascade로 함께 삭제됨. */
+/** 모든 테이블 비우기. */
 export async function resetDb(prisma: PrismaService): Promise<void> {
   await prisma.user.deleteMany();
 }

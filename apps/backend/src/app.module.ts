@@ -8,7 +8,6 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { validateEnv } from './config/env.validation';
 import { HealthModule } from './health/health.module';
-import { PicksModule } from './picks/picks.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 
@@ -42,7 +41,6 @@ const isTest = process.env.NODE_ENV === 'test';
     PrismaModule,
     UsersModule,
     AuthModule,
-    PicksModule,
     HealthModule,
   ],
   controllers: [AppController],
