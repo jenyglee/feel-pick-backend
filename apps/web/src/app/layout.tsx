@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { nanumSquareNeo } from "./fonts";
+import { nanumSquareNeo } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {

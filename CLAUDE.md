@@ -116,16 +116,17 @@ Controller  →  Service  →  Repository  →  PrismaService(DB)
 ### 5.1 파일 역할 / 코드 배치 (단일 책임)
 
 - **한 파일 = 한 역할.** 어떤 코드가 그 파일의 역할과 안 맞으면 **역할에 맞는 파일로 옮기고, 없으면 새로 만든다.** 한 파일이 두 역할을 지면 분리한다.
-- 라우트 파일(`layout.tsx`/`page.tsx`)엔 **라우팅·렌더링만.** 폰트 로딩·SDK 초기화·상수·비즈니스 로직은 ✕ → 전용 모듈로.
+- **`src/app/`엔 라우트 관련 파일만** (`page.tsx`/`layout.tsx`/`route.ts` + 그 라우트 전용 UI). 공용 모듈(폰트·유틸·훅·상수 등)은 ✕ → `src/lib`·`src/components`로.
+- 라우트 파일엔 **라우팅·렌더링만.** 폰트 로딩·SDK 초기화·상수·비즈니스 로직은 ✕ → 전용 모듈로.
   - (나쁜 예) `layout.tsx` 안에서 `localFont({...})` 정의
-  - (좋은 예) `src/app/fonts/index.ts`에 정의 후 `import`
+  - (좋은 예) `src/lib/fonts/index.ts`에 정의 후 `import { nanumSquareNeo } from "@/lib/fonts"`
 - 배치 맵:
-  - 폰트 로더/파일 → `src/app/fonts/`
+  - 폰트 로더/파일 → `src/lib/fonts/`
   - 디자인 토큰(컬러/타이포) → `src/app/globals.css`의 `@theme`
   - API 호출 → `src/lib/api.ts` (openapi-fetch)
-  - 순수 함수·공용 로직 → `src/lib/`
+  - 순수 함수·공용 로직 → `src/lib/` (`utils`·`hooks`·`constants`·`types` 등)
   - 재사용 컴포넌트 → `src/components/` (처음 필요할 때 생성)
-- 판단이 애매하면 비슷한 기존 코드가 어디 있는지 먼저 찾고 그 옆에 둔다.
+- import는 `@/*` 별칭(`@/* → ./src/*`) 사용. 판단이 애매하면 비슷한 기존 코드 옆에 둔다.
 
 ---
 

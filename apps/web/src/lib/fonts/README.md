@@ -1,7 +1,7 @@
 # 폰트 (NanumSquare Neo)
 
 `NanumSquare Neo`는 Google Fonts에 없어서 **로컬 폰트(woff2)** 로 로드합니다.
-원본 TTF를 `woff2`로 변환해 넣었고, [`../layout.tsx`](../layout.tsx)의 `next/font/local`로 활성화돼 있어요.
+원본 TTF를 `woff2`로 변환해 넣었고, [`layout.tsx`](../../app/layout.tsx)의 `next/font/local`로 활성화돼 있어요.
 
 ## 현재 포함된 파일 (woff2, TTF에서 변환 · 약 -82%)
 
@@ -18,7 +18,7 @@
 ## 적용 경로
 
 - `./index.ts` → `localFont({ ... variable: "--font-nanum-square-neo" })` 로 `nanumSquareNeo` export
-- `layout.tsx` → `import { nanumSquareNeo } from "./fonts"` 후 `<html>`에 주입
+- `layout.tsx` → `import { nanumSquareNeo } from "@/lib/fonts"` 후 `<html>`에 주입
 - `globals.css` → `--font-display` 맨 앞이 `var(--font-nanum-square-neo)` → `font-display` 유틸/`body`에 적용
 
 ## weight 추가/교체
