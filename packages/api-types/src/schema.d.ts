@@ -71,6 +71,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/choices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 초이스 피드 (질문 + 랜덤 후보 4명)
+         * @description questionId 없으면 새 질문(초기/스킵), 있으면 같은 질문 + 새 후보(다시 섞기).
+         */
+        get: operations["ChoiceController_getFeed"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/choices/select": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 카드 선택 기록 후 다음 피드 반환 */
+        post: operations["ChoiceController_select"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -123,6 +160,52 @@ export interface components {
             displayName: string;
             /** Format: date-time */
             createdAt: string;
+        };
+        Question: {
+            /** Format: uuid */
+            id: string;
+            /** @example 술 잘 먹을 것 같은 친구 */
+            text: string;
+        };
+        Profile: {
+            /** Format: uuid */
+            id: string;
+            /** @example 하리니 */
+            displayName: string;
+            /** @example https://i.pravatar.cc/600?img=5 */
+            photoUrl: string | null;
+            /**
+             * @description 나와의 거리(km, 목업)
+             * @example 17
+             */
+            distanceKm: number | null;
+            /** @example @hx_rxx_ 맞팔도 받아용! */
+            bio: string | null;
+            /**
+             * @example [
+             *       "홍대",
+             *       "스티커 사진",
+             *       "닌텐도"
+             *     ]
+             */
+            interests: string[];
+        };
+        ChoiceFeed: {
+            question: components["schemas"]["Question"];
+            /** @description 랜덤하게 주어지는 후보 카드 */
+            candidates: components["schemas"]["Profile"][];
+        };
+        SelectChoiceDto: {
+            /**
+             * Format: uuid
+             * @description 제시된 질문 ID
+             */
+            questionId: string;
+            /**
+             * Format: uuid
+             * @description 선택한 유저 ID
+             */
+            selectedUserId: string;
         };
     };
     responses: never;
@@ -211,6 +294,50 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["User"];
+                };
+            };
+        };
+    };
+    ChoiceController_getFeed: {
+        parameters: {
+            query?: {
+                questionId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChoiceFeed"];
+                };
+            };
+        };
+    };
+    ChoiceController_select: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SelectChoiceDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChoiceFeed"];
                 };
             };
         };

@@ -14,4 +14,39 @@ model User {
   passwordHash String   @db.VarChar(255)
   displayName  String   @db.VarChar(50)
   createdAt    DateTime @default(now())
+
+  // 프로필(초이스 카드 표시용)
+  photoUrl   String? @db.VarChar(500)
+  bio        String? @db.VarChar(200)
+  distanceKm Int? // 목업: 나와의 거리(km). 위치 기능 도입 전 임시 값.
+  interests  Json? // string[] 관심사 태그 (MySQL은 스칼라 배열 미지원 → Json)
+
+  // 선택 기록 관계
+  selectionsMade     Selection[] @relation("selector")
+  selectionsReceived Selection[] @relation("selected")
+}
+
+// 카드 위에 제시되는 질문(타이틀). 예: "술 잘 먹을 것 같은 친구"
+model Question {
+  id        String   @id @default(uuid()) @db.VarChar(36)
+  text      String   @db.VarChar(100)
+  createdAt DateTime @default(now())
+
+  selections Selection[]
+}
+
+// 어떤 질문에서 어떤 유저를 골랐는지 기록. (공개 API라 selector는 없을 수 있음 → nullable)
+model Selection {
+  id             String   @id @default(uuid()) @db.VarChar(36)
+  question       Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId     String   @db.VarChar(36)
+  selected       User     @relation("selected", fields: [selectedUserId], references: [id], onDelete: Cascade)
+  selectedUserId String   @db.VarChar(36)
+  selector       User?    @relation("selector", fields: [selectorUserId], references: [id], onDelete: SetNull)
+  selectorUserId String?  @db.VarChar(36)
+  createdAt      DateTime @default(now())
+
+  @@index([questionId])
+  @@index([selectedUserId])
+  @@index([selectorUserId])
 }

@@ -106,6 +106,71 @@
         ]
       }
     },
+    "/choices": {
+      "get": {
+        "description": "questionId 없으면 새 질문(초기/스킵), 있으면 같은 질문 + 새 후보(다시 섞기).",
+        "operationId": "ChoiceController_getFeed",
+        "parameters": [
+          {
+            "name": "questionId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChoiceFeed"
+                }
+              }
+            }
+          }
+        },
+        "summary": "초이스 피드 (질문 + 랜덤 후보 4명)",
+        "tags": [
+          "choices"
+        ]
+      }
+    },
+    "/choices/select": {
+      "post": {
+        "operationId": "ChoiceController_select",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SelectChoiceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChoiceFeed"
+                }
+              }
+            }
+          }
+        },
+        "summary": "카드 선택 기록 후 다음 피드 반환",
+        "tags": [
+          "choices"
+        ]
+      }
+    },
     "/health": {
       "get": {
         "operationId": "HealthController_check",
@@ -373,6 +438,109 @@
           "email",
           "displayName",
           "createdAt"
+        ]
+      },
+      "Question": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "text": {
+            "type": "string",
+            "example": "술 잘 먹을 것 같은 친구"
+          }
+        },
+        "required": [
+          "id",
+          "text"
+        ]
+      },
+      "Profile": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "displayName": {
+            "type": "string",
+            "example": "하리니"
+          },
+          "photoUrl": {
+            "type": "string",
+            "nullable": true,
+            "example": "https://i.pravatar.cc/600?img=5"
+          },
+          "distanceKm": {
+            "type": "number",
+            "nullable": true,
+            "example": 17,
+            "description": "나와의 거리(km, 목업)"
+          },
+          "bio": {
+            "type": "string",
+            "nullable": true,
+            "example": "@hx_rxx_ 맞팔도 받아용!"
+          },
+          "interests": {
+            "example": [
+              "홍대",
+              "스티커 사진",
+              "닌텐도"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "displayName",
+          "photoUrl",
+          "distanceKm",
+          "bio",
+          "interests"
+        ]
+      },
+      "ChoiceFeed": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "$ref": "#/components/schemas/Question"
+          },
+          "candidates": {
+            "description": "랜덤하게 주어지는 후보 카드",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Profile"
+            }
+          }
+        },
+        "required": [
+          "question",
+          "candidates"
+        ]
+      },
+      "SelectChoiceDto": {
+        "type": "object",
+        "properties": {
+          "questionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "제시된 질문 ID"
+          },
+          "selectedUserId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "선택한 유저 ID"
+          }
+        },
+        "required": [
+          "questionId",
+          "selectedUserId"
         ]
       }
     }
