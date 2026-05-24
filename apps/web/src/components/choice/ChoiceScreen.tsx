@@ -19,6 +19,9 @@ export function ChoiceScreen() {
   const [failed, setFailed] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [reshuffleLeft, setReshuffleLeft] = useState(RESHUFFLE_LIMIT);
+  // 피드가 바뀔 때마다 +1. 카드 key에 넣어 매 라운드 새 인스턴스로 마운트한다.
+  // (날린 카드의 모션값 x=500/opacity=0 이 같은 id 재등장 시 남아 "누락"되는 것 방지)
+  const [round, setRound] = useState(0);
 
   // setState는 모두 await 이후에 (마운트 effect에서 동기 setState 경고 방지).
   // 로딩 표시가 필요한 호출부(버튼)는 직접 setLoading(true) 후 호출한다.
@@ -31,6 +34,7 @@ export function ChoiceScreen() {
       setFailed(true);
     } else {
       setFeed(data);
+      setRound((r) => r + 1);
       setFailed(false);
     }
     setLoading(false);
@@ -46,6 +50,7 @@ export function ChoiceScreen() {
         setFailed(true);
       } else {
         setFeed(data);
+        setRound((r) => r + 1);
       }
       setLoading(false);
     })();
@@ -65,6 +70,7 @@ export function ChoiceScreen() {
       });
       if (data) {
         setFeed(data);
+        setRound((r) => r + 1);
         setReshuffleLeft(RESHUFFLE_LIMIT);
         setLoading(false);
       } else {
@@ -143,7 +149,7 @@ export function ChoiceScreen() {
           <div className="grid grid-cols-2 gap-3">
             {(feed?.candidates ?? []).map((profile) => (
               <ProfileCard
-                key={profile.id}
+                key={`${round}-${profile.id}`}
                 profile={profile}
                 disabled={loading}
                 onSelect={() => void handleSelect(profile.id)}
