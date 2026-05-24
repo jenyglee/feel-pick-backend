@@ -31,10 +31,6 @@ export function ProfileCard({
       drag={disabled ? false : 'x'}
       dragConstraints={{ left: 0, right: 0 }}
       dragElastic={{ left: 0.1, right: 0.9 }}
-      whileTap={{ scale: 0.98 }}
-      onTap={() => {
-        if (!disabled) onExpand();
-      }}
       onDragEnd={(_, info) => {
         if (info.offset.x > SELECT_THRESHOLD) {
           // 오른쪽으로 날려보내고 선택 완료.
